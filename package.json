@@ -1,0 +1,17 @@
+{
+  "name": "riskassessmenttool",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "start:local": "nodemon run app.js"
+  },
+  "author": "Matthew McGuff",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.4",
+    "morgan": "^1.9.1",
+    "nodemon": "^1.18.11"
+  }
+}
