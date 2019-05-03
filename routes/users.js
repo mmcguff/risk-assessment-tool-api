@@ -40,4 +40,12 @@ router.post('/', async (req, res) => {
     res.send(user);
   });
 
+router.get('/:userId', async (req, res) => {
+  const user = await User.findById(req.params.userId);
+
+  if (!user) return res.status(404).send('The user with the given ID was not found.');
+
+  res.send(user);
+});
+
 module.exports = router; 
