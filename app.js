@@ -1,5 +1,5 @@
 const express = require('express');
-const cors = require('cors');
+// const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -14,7 +14,8 @@ mongoose.connect(uristring, { useCreateIndex: true, useNewUrlParser: true })
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan('combined'));
-app.use(cors());
+
+
 
 app.use('/api/v1/users', users);
 

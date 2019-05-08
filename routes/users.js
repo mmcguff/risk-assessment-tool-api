@@ -1,5 +1,6 @@
 const {User, validate} = require('../models/User');
 //const {Risk} = require('../models/risk');
+const cors = require('cors');
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
@@ -7,12 +8,21 @@ const rp = require('request-promise');
 const _ = require('lodash');
 const getRisk = require('./helper/getRisk');
 
-
+const whitelist = ['hhttps://risk-assessment-tool-react-app.netlify.com', 'https://risk-assessment-tool-react-app.herokuapp.com/', 'http://192.168.10.249:3000/']
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.post('/', async (req, res) => {
+router.post('/', cors(corsOptions), async (req, res) => {
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
   
@@ -29,7 +39,7 @@ router.post('/', async (req, res) => {
     res.send(user);
   });
 
-router.get('/:userId', async (req, res) => {
+router.get('/:userId', cors(corsOptions), async (req, res) => {
   const user = await User.findById(req.params.userId);
   if (!user) return res.status(404).send('The user with the given ID was not found.');
   
