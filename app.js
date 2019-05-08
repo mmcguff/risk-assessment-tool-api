@@ -6,13 +6,10 @@ const morgan = require('morgan');
 const users = require('./routes/users');
 const app = express();
 
-
-const config = require('./db');
-
-mongoose.connect(config.DB, { useNewUrlParser: true }).then(
-  () => {console.log('Database is connected') },
-  err => { console.log('Can not connect to the database'+ err)}
-);
+const uristring = process.env.MONGODB_URI || 'mongodb://localhost/risk-assessment';
+mongoose.connect(uristring, { useCreateIndex: true, useNewUrlParser: true })
+    .then(() => console.log(`Succeeded connected to: ${uristring}`))
+    .catch(err => console.log(`ERROR connecting to: ${uristring}.  ${err}`)); 
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -20,7 +17,6 @@ app.use(morgan('combined'));
 app.use(cors());
 
 app.use('/api/v1/users', users);
-
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
