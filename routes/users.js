@@ -1,5 +1,5 @@
 const {User, validate} = require('../models/User');
-const {Risk} = require('../models/risk');
+//const {Risk} = require('../models/risk');
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
