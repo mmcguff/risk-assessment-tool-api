@@ -1,6 +1,6 @@
 const Joi = require('joi');
 const mongoose = require('mongoose');
-const { riskSchema } = require('./risk');
+//const { riskSchema } = require('./risk');
 
 const User = mongoose.model('Users', new mongoose.Schema({
     email: {
@@ -49,10 +49,6 @@ const User = mongoose.model('Users', new mongoose.Schema({
         required: true,
         minlength: 5,
         maxlength: 5
-    },
-    risk: {
-      type: riskSchema,
-      //required: true
     }
   })
 );

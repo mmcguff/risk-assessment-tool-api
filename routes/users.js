@@ -5,38 +5,8 @@ const router = express.Router();
 const bodyParser = require('body-parser');
 const rp = require('request-promise');
 const _ = require('lodash');
+const getRisk = require('./helper/getRisk');
 
-
-function filterByDrought(item){ return item.value == "Drought" ? true : false};
-
-
-async function getRisks(data) {
-  
-  const totalIncidents = data.metadata.count;
-  let incidentArray = data.DisasterDeclarationsSummaries;
-
-  const fire = incidentArray.filter(function(incident){ return incident.incidentType == 'Fire';}).length;
-  const flood = incidentArray.filter(function(incident){ return incident.incidentType == 'Flood';}).length;
-  const drought = incidentArray.filter(function(incident){ return incident.incidentType == 'Drought';}).length;
-  const hurricane = incidentArray.filter(function(incident){ return incident.incidentType == 'Hurricane';}).length;
-  const tornado = incidentArray.filter(function(incident){ return incident.incidentType == 'Tornado';}).length;
-  const earthquake = incidentArray.filter(function(incident){ return incident.incidentType == 'Earthquake';}).length;
-  const snow = incidentArray.filter(function(incident){ return incident.incidentType == 'Snow';}).length;
-
-  const payload = {
-      totalIncidents,
-      fire,
-      flood,
-      drought,
-      hurricane,
-      tornado,
-      earthquake,
-      snow
-  }
-  // let risk = new Risk({...payload});
-  // risk = await risk.save();
-  return payload; 
-}
 
 
 router.use(bodyParser.json());
@@ -52,8 +22,7 @@ router.post('/', async (req, res) => {
       lastName: req.body.lastName,
       streetAddress: req.body.streetAddress,
       state: req.body.state,
-      zip: req.body.zip,
-      risk: await getRisks(req.body.state, req.body.zip)
+      zip: req.body.zip
     });
     await user.save();
     
@@ -85,7 +54,7 @@ router.get('/:userId', async (req, res) => {
 
   rp(options)
   .then(async (data) => {
-      const payload = await getRisks(data);
+      const payload = await getRisk(data);
       res.send(payload);
   })
   .catch(async (err) => {
@@ -94,7 +63,5 @@ router.get('/:userId', async (req, res) => {
   });
 
 });
-
-
 
 module.exports = router; 
