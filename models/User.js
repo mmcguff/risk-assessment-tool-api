@@ -31,6 +31,13 @@ const User = mongoose.model('Users', new mongoose.Schema({
         minlength: 5,
         maxlength: 255
       },
+      city: {
+        type: String,
+        required: false,
+        trim: true,
+        minlength: 5,
+        maxlength: 255
+      },
     state: {
         type: String,
         required: true,
@@ -56,6 +63,7 @@ function validateUser(user) {
     firstName: Joi.string().min(5).max(50).required(),
     lastName: Joi.string().min(5).max(50).required(),
     streetAddress: Joi.string().min(5).max(50),
+    city: Joi.string().min(5).max(50),
     state: Joi.string().min(2).max(4).required(),
     zip: Joi.string().min(5).max(5).required(),
     //riskId: Joi.objectId(),

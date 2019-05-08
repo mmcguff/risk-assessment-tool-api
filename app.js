@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
@@ -15,25 +16,11 @@ mongoose.connect(config.DB, { useNewUrlParser: true }).then(
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
 app.use(morgan('combined'));
+app.use(cors());
 
 app.use('/api/v1/users', users);
 
-// app.post('/users', async (req, res) =>{
-//     const { error } = validate(req.body); 
-//     if (error) return res.status(400).send(error.details[0].message);
 
-
-// });
-
-
-// app.get('/results/:state', async function(req, res){
-//     const state = req.params.state;
-
-//     res.send(`returning results for ${state}`);
-// });
-
-
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
