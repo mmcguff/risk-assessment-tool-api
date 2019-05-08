@@ -16,7 +16,8 @@ const corsOptions = {
     } else {
       callback(new Error('Not allowed by CORS'))
     }
-  }
+  },
+  optionsSuccessStatus: 204
 }
 
 router.use(bodyParser.json());
