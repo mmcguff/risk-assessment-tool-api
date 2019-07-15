@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const morgan = require('morgan');
 const users = require('./routes/users');
+const incidents = require('./routes/incidents');
 const app = express();
 
 const uristring = process.env.MONGODB_URI || 'mongodb://localhost/risk-assessment';
@@ -18,6 +19,7 @@ app.use(morgan('combined'));
 app.use(cors());
 
 app.use('/api/v1/users', users);
+app.use('/api/v1/incidents', incidents);
 
 const port = process.env.PORT || 3001;
 app.listen(port, () => console.log(`Listening on port ${port}...`));
