@@ -44,6 +44,9 @@ router.get('/:userId', async (req, res) => {
   const user = await User.findById(req.params.userId);
   if (!user) return res.status(404).send('The user with the given ID was not found.');
   
+  //TODO: Get Data from FEMA and not from the API 
+
+
   const state = user.state; //TODO: Do Error handling on this
   const options = {
     uri: 'http://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries',
