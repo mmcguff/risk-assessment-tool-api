@@ -1,24 +1,11 @@
 const {User, validate} = require('../models/User');
-//const {Risk} = require('../models/risk');
-const cors = require('cors');
 const express = require('express');
 const router = express.Router();
 const bodyParser = require('body-parser');
-const rp = require('request-promise');
-const _ = require('lodash');
-const getRisk = require('./helper/getRisk');
-
-// const whitelist = ['https://risk-assessment-tool-react-app.netlify.com', 'https://risk-assessment-tool-react-app.herokuapp.com/', 'http://192.168.10.249:3000/']
-// const corsOptions = {
-//   origin: function (origin, callback) {
-//     if (whitelist.indexOf(origin) !== -1) {
-//       callback(null, true)
-//     } else {
-//       callback(new Error('Not allowed by CORS'))
-//     }
-//   },
-//   optionsSuccessStatus: 204
-// }
+const utils = require('./helper/utils');
+const targetIncidents = [ 'Fire', 'Flood', 'Drought', 'Hurricane', 'Tornado', 'Earthquake', 'Snow' ];
+const MongoClient = require('mongodb').MongoClient;
+const url = process.env.MONGODB_URI || 'mongodb://localhost/risk-assessment';
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
@@ -45,37 +32,18 @@ router.get('/:userId', async (req, res) => {
   if (!user) return res.status(404).send('The user with the given ID was not found.');
   
   //TODO: Get Data from FEMA and not from the API 
-
-
-  const state = user.state; //TODO: Do Error handling on this
-  const options = {
-    uri: 'http://www.fema.gov/api/open/v1/DisasterDeclarationsSummaries',
-    qs: {  
-      "$inlinecount":  "allpages",
-      "$select":  "title,incidentType,state",
-      "$orderby":  "incidentType",
-      "$filter":  "state eq '" + state 
-    +  "' and incidentType eq 'Fire' or state eq '" + state 
-    +  "' and incidentType eq 'Flood' or state eq '" + state 
-    +  "' and incidentType eq 'Drought' or state eq '" + state 
-    +  "' and incidentType eq 'Hurricane' or state eq '" + state 
-    +  "' and incidentType eq 'Tornado' or state eq '" + state 
-    +  "' and incidentType eq 'Earthquake' or state eq '" + state 
-    +  "' and incidentType eq 'Snow'"
-    },
-       json: true
-  };
-
-  rp(options)
-  .then(async (data) => {
-      const payload = await getRisk(data);
-      res.send(payload);
-  })
-  .catch(async (err) => {
-      console.log(err);
-      res.send(err);
+  MongoClient.connect(url, function(err, db) {
+    if (err) throw err;
+    const dbo = db.db('risk-assessment');
+    var query = { state: user.state, incidentType: {$in: targetIncidents} };
+    dbo.collection("fema").find(query).toArray(function(err, body) {
+      if (err) throw err;
+        res.send(utils.transformFEMABody(body));
+      db.close();
+    });
   });
 
-});
+  
+  });
 
 module.exports = router; 

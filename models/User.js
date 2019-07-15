@@ -5,8 +5,8 @@ const mongoose = require('mongoose');
 const User = mongoose.model('Users', new mongoose.Schema({
     email: {
       type: String,
-      required: true,
-      minlength: 5,
+      required: false,
+      minlength: 3,
       maxlength: 255,
       //unique: true
     },
@@ -14,28 +14,28 @@ const User = mongoose.model('Users', new mongoose.Schema({
       type: String,
       required: true,
       trim: true,
-      minlength: 5,
+      minlength: 3,
       maxlength: 50
     },
     lastName: {
       type: String,
       required: true,
       trim: true,
-      minlength: 5,
+      minlength: 3,
       maxlength: 50
     },
     streetAddress: {
         type: String,
         required: false,
         trim: true,
-        minlength: 5,
+        minlength: 3,
         maxlength: 255
       },
       city: {
         type: String,
         required: false,
         trim: true,
-        minlength: 5,
+        minlength: 1,
         maxlength: 255
       },
     state: {
@@ -55,11 +55,11 @@ const User = mongoose.model('Users', new mongoose.Schema({
 
 function validateUser(user) {
   const schema = {
-    email: Joi.string().min(5).max(255).required().email(),
-    firstName: Joi.string().min(5).max(50).required(),
-    lastName: Joi.string().min(5).max(50).required(),
-    streetAddress: Joi.string().min(5).max(50),
-    city: Joi.string().min(5).max(50),
+    email: Joi.string().min(3).max(255).email(),
+    firstName: Joi.string().min(3).max(50).required(),
+    lastName: Joi.string().min(3).max(50).required(),
+    streetAddress: Joi.string().min(3).max(50),
+    city: Joi.string().min(1).max(50),
     state: Joi.string().min(2).max(4).required(),
     zip: Joi.string().min(5).max(5).required(),
     //riskId: Joi.objectId(),
