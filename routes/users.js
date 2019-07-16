@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const utils = require('./helper/utils');
 const targetIncidents = [ 'Fire', 'Flood', 'Drought', 'Hurricane', 'Tornado', 'Earthquake', 'Snow' ];
 const MongoClient = require('mongodb').MongoClient;
-const url = process.env.MONGODB_URI || 'mongodb://localhost/risk-assessment';
+const url = `${process.env.MONGODB_URI}/risk-assessment` || 'mongodb://localhost/risk-assessment';
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
