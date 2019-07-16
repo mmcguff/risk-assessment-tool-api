@@ -11,12 +11,12 @@ let cloud = true;
 let mongodbHost = '127.0.0.1';
 let mongodbPort = '27017';
  
-let authenticate ='';
+let authenticate = '' ;
 //cloud
 if (cloud) {
  mongodbHost = 'ds153566.mlab.com';
  mongodbPort = '53566';
- authenticate = 'mmcguff:Missionary1!'
+ authenticate = 'heroku_x4b1bbw2:a8b4oh91gdg80ekftok3cf957j@'
 }
  
 var mongodbDatabase = 'risk-assessment';
@@ -53,7 +53,7 @@ router.get('/:userId', async (req, res) => {
     if (err) throw err;
     const dbo = db.db('risk-assessment');
     var query = { state: user.state, incidentType: {$in: targetIncidents} };
-    dbo.collection("fema").find(query).toArray(function(err, body) {
+    dbo.collection('fema').find(query).toArray(function(err, body) {
       if (err) throw err;
         res.send(utils.transformFEMABody(body));
       db.close();
