@@ -30,14 +30,15 @@ router.use(bodyParser.urlencoded({ extended: true }));
 router.post('/', async (req, res) => {
     const { error } = validate(req.body); 
     if (error) return res.status(400).send(error.details[0].message);
-  
+    console.log(req.body);
     const user = new User({ 
       email: req.body.email,
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       streetAddress: req.body.streetAddress,
       state: req.body.state,
-      zip: req.body.zip
+      zip: req.body.zip,
+      household: req.body.household
     });
     await user.save();
     
