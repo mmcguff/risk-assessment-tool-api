@@ -6,6 +6,23 @@ const utils = require('./helper/utils');
 const targetIncidents = [ 'Fire', 'Flood', 'Drought', 'Hurricane', 'Tornado', 'Earthquake', 'Snow' ];
 const MongoClient = require('mongodb').MongoClient;
 const url = `${process.env.MONGODB_URI}/risk-assessment` || 'mongodb://localhost/risk-assessment';
+let cloud = true;
+ 
+const mongodbHost = '127.0.0.1';
+const mongodbPort = '27017';
+ 
+let authenticate ='';
+//cloud
+if (cloud) {
+ mongodbHost = 'ds153566.mlab.com';
+ mongodbPort = '53566';
+ authenticate = 'mmcguff:Missionary1!'
+}
+ 
+var mongodbDatabase = 'risk-assessment';
+ 
+// connect string for mongodb server running locally, connecting to a database called test
+var url = 'mongodb://'+authenticate+mongodbHost+':'+mongodbPort + '/' + mongodbDatabase;
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
