@@ -19,7 +19,7 @@ if (cloud) {
  authenticate = 'heroku_x4b1bbw2:a8b4oh91gdg80ekftok3cf957j@'
 }
  
-var mongodbDatabase = 'heroku_x4b1bbw2';
+const mongodbDatabase = 'heroku_x4b1bbw2';
  
 // connect string for mongodb server running locally, connecting to a database called test
 const url = 'mongodb://'+authenticate+mongodbHost+':'+mongodbPort + '/' + mongodbDatabase;
@@ -51,7 +51,7 @@ router.get('/:userId', async (req, res) => {
   //TODO: Get Data from FEMA and not from the API 
   MongoClient.connect(url, { useNewUrlParser: true }, function(err, db) {
     if (err) throw err;
-    const dbo = db.db('risk-assessment');
+    const dbo = db.db(mongodbDatabase);
     var query = { state: user.state, incidentType: {$in: targetIncidents} };
     dbo.collection('fema').find(query).toArray(function(err, body) {
       if (err) throw err;
