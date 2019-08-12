@@ -13,7 +13,7 @@ const targetIncidents = [
   'Snow'
 ];
 const MongoClient = require('mongodb').MongoClient;
-const { url, configs } = require('../configs/mongoDbConfigs');
+const { url, configs } = require('../configs/dbConfig');
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
