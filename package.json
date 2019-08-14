@@ -14,6 +14,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "joi": "^14.3.1",
+    "joi-us-zipcode": "^2.0.1",
     "lodash": "^4.17.15",
     "mongodb": "^3.2.7",
     "mongoose": "^5.5.5",

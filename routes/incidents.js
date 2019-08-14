@@ -4,15 +4,14 @@ const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const utils = require('./helper/utils');
 const targetIncidents = [ 'Fire', 'Flood', 'Drought', 'Hurricane', 'Tornado', 'Earthquake', 'Snow' ];
-const { url, configs, mysqlConfigs } = require('../configs/dbConfig');
-const mysql = require('mysql');
-const con = mysql.createConnection({mysqlConfigs});
+const { url, configs, pool } = require('../configs/dbConfig');
+const validationMiddleware = require('../middleware/validationMiddleware');
 
 
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.get('/:state', async (req, res) => {
+router.get('/fema/:state', async (req, res) => {
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
@@ -27,15 +26,19 @@ router.get('/:state', async (req, res) => {
 
 });
 
-router.get('/:state/:zip', async (req, res) => {
-  con.connect(function(err) {
-    if (err) throw err;
-    con.query("select * from disasterdec where state = 'ID' and AFZIPCODES like '%83401%';", function (err, result, fields) {
-      if (err) throw err;
-      console.log(result);
+router.get('/disasters/:state/:zip', validationMiddleware, async (req, res) => {
+
+  const state = await req.params.state.toUpperCase();
+  const zip = await req.params.zip;
+  const queryString = `select * from disasterdec where state = '${state}' and AFZIPCODES like '%${zip}%';`;
+
+  pool.getConnection(function(err, connection) {
+    connection.query(queryString, async (err, result) => {
+        connection.release();
+        if (err) throw err;
+        res.send(result);
+      });
     });
-  });
-  res.send('query completed!');
 })
 
 module.exports = router;

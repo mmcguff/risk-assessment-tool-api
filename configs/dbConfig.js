@@ -1,3 +1,5 @@
+const mysql = require('mysql');
+
 const herokuConfigs = {
     host: 'ds153566.mlab.com',
     port: '53566',
@@ -15,13 +17,13 @@ const localConfigs = {
 const configs = process.env.MONGODB_URI ? herokuConfigs : localConfigs;
 const url = `mongodb://${configs.auth}${configs.host}:${configs.port}/${configs.db}`;
 
-const mysqlConfigs = {
+const pool = mysql.createPool({
     host: "162.241.216.182",
     user: "servivec_dev",
     password: "rIV;.y(a0G=+",
     database: "servivec_safeable_data"
-};
+  });
 
 module.exports.configs = configs;
 module.exports.url = url;
-module.exports.mysqlConfigs = mysqlConfigs;
+module.exports.pool = pool;
