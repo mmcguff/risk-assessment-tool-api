@@ -10,7 +10,7 @@ const validationMiddleware = require('../middleware/validationMiddleware');
 router.use(bodyParser.json());
 router.use(bodyParser.urlencoded({ extended: true }));
 
-router.get('/fema/:state', async (req, res) => {
+router.get('/fema/:state', validationMiddleware, async (req, res) => {
 
     MongoClient.connect(url, function(err, db) {
         if (err) throw err;
