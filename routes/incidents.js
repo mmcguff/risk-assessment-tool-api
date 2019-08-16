@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const MongoClient = require('mongodb').MongoClient;
 const bodyParser = require('body-parser');
 const { pool } = require('../configs/dbConfig');
 const validationMiddleware = require('../middleware/validationMiddleware');
@@ -16,9 +15,9 @@ router.get('/disasters/:state/:zip', validationMiddleware, async (req, res) => {
 
   pool.getConnection(function(err, connection) {
     connection.query(queryString, async (err, result) => {
-        connection.release();
         if (err) throw err;
-        res.send(result);
+        await res.send(result);
+        await connection.release();
       });
     });
 })
@@ -30,9 +29,9 @@ router.get('/demographics/:zip', validationMiddleware, async (req, res) => {
 
   pool.getConnection(function(err, connection) {
     connection.query(queryString, async (err, result) => {
-        connection.release();
         if (err) throw err;
-        res.send(result);
+        await res.send(result);
+        await connection.release();
       });
     });
 })
@@ -44,9 +43,9 @@ router.get('/zip-data/:zip', validationMiddleware, async (req, res) => {
 
   pool.getConnection(function(err, connection) {
     connection.query(queryString, async (err, result) => {
-        connection.release();
         if (err) throw err;
-        res.send(result);
+      await  res.send(result);
+      await  connection.release();
       });
     });
 })
